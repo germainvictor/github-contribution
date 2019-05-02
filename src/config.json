@@ -1,0 +1,13 @@
+{
+  "token": "b2c341d1162f221d7267c05519d54de12bd29dd6",
+  "endPoint": "https://api.github.com/graphql",
+  "propertyCoefficients": {
+    "pullRequests": 300,
+    "issues": 50,
+    "commit": 30,
+    "commitComments": 10,
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1
+  }
+}
