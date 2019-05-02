@@ -10,11 +10,11 @@ Each property has a coefficient that allows to establish a score.
 
 ```sh
 git clone https://github.com/germainvictor/github-contributors.git
-cd github-contribution
+cd github-contributors
 yarn
 ```
 
-Run `github-contribution --help` to check everything is working fine.
+Run `github-contributors --help` to check everything is working fine.
 
 #### Use the project
 
