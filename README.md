@@ -19,9 +19,10 @@ Run `github-contribution --help` to check everything is working fine.
 #### Use the project
 
 Here are the different options:
-`--owner` : Name of the repository owner
-`--name` : Project name
-`--top-contributors-limit` : Return the top X users
+
+- `--owner` : Name of the repository owner
+- `--name` : Project name
+- `--top-contributors-limit` : Return the top X users
 
 #### Example
 
