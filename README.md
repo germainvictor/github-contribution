@@ -9,7 +9,7 @@ Each property has a coefficient that allows to establish a score.
 ## Getting started
 
 ```sh
-git clone https://github.com/germainvictor/github-contribution.git
+git clone https://github.com/germainvictor/github-contributors.git
 cd github-contribution
 yarn
 ```
