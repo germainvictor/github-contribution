@@ -3,7 +3,7 @@ const { propertyCoefficients } = require('./config');
 // Add the property to the user and update his score
 const assignGenericProperty = (users, entities, property) => {
   entities.forEach((entity) => {
-    if (!entity.author) return;
+    if (!entity || !entity.author) return;
 
     const user = users[entity.author.login];
     if (!user) return;
@@ -18,7 +18,7 @@ const assignGenericProperty = (users, entities, property) => {
 // Same as above, but commits are a bit different from others properties
 const assignCommitProperty = (users, commits) => {
   commits.forEach((commit) => {
-    if (!commit.author.user) return;
+    if (!commit || !commit.author.user) return;
 
     const user = users[commit.author.user.login];
     if (!user) return;

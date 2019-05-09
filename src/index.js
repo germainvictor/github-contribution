@@ -11,7 +11,12 @@ const {
 
 const fetchGithubContributors = async (owner, name, topContributorsLimit) => {
   // Get repository for basics metrics (description, commits count, languages, ...)
-  const repository = await getRepository(owner, name);
+  const repository = await getRepository(owner, name).catch((e) => {
+    process.stderr.write(
+      `Server returned an error while fetching repository data: ${JSON.stringify(e, null, 2)}\n`,
+    );
+    process.exit(1);
+  });
 
   // Get mentionable users (users that can be mentioned in the context of the repository)
   const users = (await getEntities(
@@ -24,8 +29,14 @@ const fetchGithubContributors = async (owner, name, topContributorsLimit) => {
   // This queries "generic" entities (such as pull requests, issues, etc) that share the same schema
   // Then it iterates over users to assign these properties
   const genericEntityMapper = async (query, property) => {
-    const entities = await getEntities(query, owner, name, data => data.repository[property]);
-    assignGenericProperty(users, entities, property);
+    try {
+      const entities = await getEntities(query, owner, name, data => data.repository[property]);
+      assignGenericProperty(users, entities, property);
+    } catch (e) {
+      process.stderr.write(
+        `Got an error with ${property} request: ${JSON.stringify(e, null, 2)}\n`,
+      );
+    }
   };
 
   // Triggers all requests at the same time to collect entities and map properties concurrently
@@ -35,14 +46,13 @@ const fetchGithubContributors = async (owner, name, topContributorsLimit) => {
     genericEntityMapper(QUERY_COMMIT_COMMENTS, 'commitComments'),
     genericEntityMapper(QUERY_ISSUES, 'issues'),
     // Get commits and assign metrics to each user
-    getEntities(
-      QUERY_COMMITS,
-      owner,
-      name,
-      data => data.repository.defaultBranchRef.target.history,
-    ).then((commits) => {
-      assignCommitProperty(users, commits);
-    }),
+    getEntities(QUERY_COMMITS, owner, name, data => data.repository.defaultBranchRef.target.history)
+      .then((commits) => {
+        assignCommitProperty(users, commits);
+      })
+      .catch((e) => {
+        process.stderr.write(`Got an error with commits request: ${JSON.stringify(e, null, 2)}\n`);
+      }),
   ]);
 
   // Sort the users by their score (and filter out users who haven't actually contributed)

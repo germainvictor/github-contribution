@@ -12,6 +12,12 @@ const client = new ApolloClient({
       },
     });
   },
+  onError: ({ response }) => {
+    if (response.data && response.errors) {
+      process.stderr.write(`Got an error in query: ${JSON.stringify(response.errors, null, 2)}\n`);
+      response.errors = null;
+    }
+  },
 });
 
 module.exports = client;
